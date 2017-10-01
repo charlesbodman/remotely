@@ -21,6 +21,7 @@ TODO: Fill out this long description.
 ## Install
 
 ```
+npm install -g 'https://github.com/charlesbodman/remotely'
 ```
 
 ## Usage
@@ -32,7 +33,7 @@ TODO: Fill out this long description.
 
 ## Maintainers
 
-[@@charlesbodman](https://github.com/@charlesbodman)
+[@charlesbodman](https://github.com/@charlesbodman)
 
 ## Contribute
 
