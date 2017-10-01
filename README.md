@@ -18,15 +18,29 @@ TODO: Fill out this long description.
 
 ## Background
 
-## Install
+## Prerequisites
+- rsync
 
+## Install
 ```
-npm install -g 'https://github.com/charlesbodman/remotely'
+npm install -g https://github.com/charlesbodman/remotely
 ```
 
 ## Usage
+```
+remotely init
+```
 
 ```
+remotely watch
+```
+
+```
+remotely pull
+```
+
+```
+remotely push
 ```
 
 ## API
