@@ -1,10 +1,11 @@
 #! /usr/bin/env node
-const fs       = require("fs");
+const fs = require("fs");
 const debounce = require("debounce");
-const shell    = require("shelljs");
-const cwd      = process.cwd();
-const argv     = require("minimist")(process.argv.slice(2));
+const shell = require("shelljs");
+const cwd = process.cwd();
+const argv = require("minimist")(process.argv.slice(2));
 const chokidar = require("chokidar");
+const findUp = require("find-up");
 
 /**
  * Log Tag
@@ -32,7 +33,18 @@ function Log(message) {
  * Reads remotely config and returns config object
  */
 function readRemotelyConfig() {
-    return JSON.parse(fs.readFileSync(`${cwd}/.remotely.json`));
+    return new Promise((resolve, reject) => {
+        findUp(".remotely.json").then(filePath => {
+            try {
+                const configContent = fs.readFileSync(filePath);
+                const config = JSON.parse(configContent);
+                resolve(config);
+            }
+            catch (error) {
+                reject(error);
+            }
+        }).catch(reject);
+    });
 }
 
 
@@ -56,7 +68,7 @@ function stringMatchesRegexArray(regexArray, needle) {
 function listenToFileChanges(dir, callback) {
     Log(`Listening to ${dir}`);
     const watcher = chokidar.watch(dir, { persistent: true });
-    watcher.on("change",function(path){
+    watcher.on("change", function (path) {
         Log(`Change detected ${path}`);
         callback();
     });
@@ -78,49 +90,48 @@ function createRsyncCommand({ source, dest, rsync_flags }) {
 }
 
 
-/**
- * Remotely config
- */
-const remotelyConfig = Object.assign({}, DEFAULT_OPTIONS, readRemotelyConfig());
 
-/**
- * Pull Rsync
- */
-const push = createRsyncCommand({
-    source: remotelyConfig.local,
-    dest: remotelyConfig.remote,
-    rsync_flags: remotelyConfig.rsync_flags
-})
 
-/**
- * Push Rsync
- */
-const pull = createRsyncCommand({
-    source: remotelyConfig.remote,
-    dest: remotelyConfig.local,
-    rsync_flags: remotelyConfig.rsync_flags
+
+
+
+
+readRemotelyConfig().then(config => {
+    
+    Log("Config found");
+
+    const remotelyConfig = Object.assign({}, DEFAULT_OPTIONS, config);
+
+    const push = createRsyncCommand({
+        source: remotelyConfig.local,
+        dest: remotelyConfig.remote,
+        rsync_flags: remotelyConfig.rsync_flags
+    })
+
+    const pull = createRsyncCommand({
+        source: remotelyConfig.remote,
+        dest: remotelyConfig.local,
+        rsync_flags: remotelyConfig.rsync_flags
+    });
+
+    const command = argv._[0];
+
+    switch (command) {
+        case "watch":
+            listenToFileChanges(remotelyConfig.local, debounce(push, 100));
+            break;
+
+        case "pull":
+            pull();
+            break;
+
+        case "push":
+            push();
+            break;
+
+        default:
+            Log(`Command ${command} not found`);
+            break;
+    }
+
 });
-
-
-/**
- * Handle commands
- */
-const command = argv._[0];
-
-switch (command) {
-    case "watch":
-        listenToFileChanges(remotelyConfig.local, debounce(push, 100));
-        break;
-
-    case "pull":
-        pull();
-        break;
-
-    case "push":
-        push();
-        break;
-
-    default:
-        Log(`Command ${command} not found`);
-        break;
-}
