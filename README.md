@@ -1,22 +1,14 @@
 # remotely
 
-TODO: Put more badges here.
-
-> Watch, push or pull files to sync local and remote development with rsync.
-
-TODO: Fill out this long description.
-
 ## Table of Contents
 
-- [Background](#background)
+- [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Usage](#usage)
 - [API](#api)
 - [Maintainers](#maintainers)
 - [Contribute](#contribute)
 - [License](#license)
-
-## Background
 
 ## Prerequisites
 - rsync
