@@ -2,15 +2,13 @@
 
 ## Table of Contents
 
-- [Background](#background)
+- [Prerequisites](#prerequisites)
 - [Install](#install)
 - [Usage](#usage)
 - [API](#api)
 - [Maintainers](#maintainers)
 - [Contribute](#contribute)
 - [License](#license)
-
-## Background
 
 ## Prerequisites
 - rsync
