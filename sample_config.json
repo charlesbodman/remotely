@@ -1,0 +1,11 @@
+{
+    "local":"", //Absolute path to local directory to sync
+    "remote":"" //Remote source
+//  "rsync_flags":"-Wavzh --stats --delete"
+}
+
+// Example
+// {
+//     "local":"/Users/charliebodman/Documents/Remote/kano_synced/apps", 
+//     "remote":"charlie@kanohub.com:~/kano/apps"
+// }
