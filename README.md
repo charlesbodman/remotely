@@ -49,6 +49,7 @@ This means that the config can belong anywhere, as long as remotely can find it 
 | local         | local path to sync dir | required |
 | remote      | remote host and path | required |
 | rsync_flags | flags to customize rsync  | optional |
+| dry_run | perform dry run | optional |
 
 **Example config**
 
