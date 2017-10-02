@@ -29,7 +29,7 @@ Run this in any parent directory from where you are going to be running `remotel
 Remotely will climb up and use the first config file it finds
 [Read about config here](#config)
 
-Make sure you edit your config (`.remotely.json`) file after doing this. 
+Make sure you edit your config (`.remotely.json`) file after doing this.
 
 ---
 
@@ -61,14 +61,15 @@ This means that the config can belong anywhere, as long as remotely can find it 
 | remote      | remote host and path | required |
 | rsync_flags | flags to customize rsync  | optional |
 | dry_run | perform dry run | optional |
+| exclude | files or directories to exclude | optional |
 
 **Example config**
 
-This could live in `/Users/charliebodman/documents/kano/apps/.remotely.json` 
+This could live in `/Users/charliebodman/documents/kano/apps/.remotely.json`
 You can create remotely config by calling `remotely init`
 ```javascript
 {
-    "local":"/Users/charliebodman/documents/kano/apps", 
+    "local":"/Users/charliebodman/documents/kano/apps",
     "remote":"charlie@example.com:~/kano/apps"
 }
 ```

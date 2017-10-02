@@ -6,7 +6,11 @@
 
 // Example
 // {
-//     "local":"/Users/charliebodman/documents/kano/apps", 
+//     "local":"/Users/charliebodman/documents/kano/apps",
 //     "remote":"charlie@example.com:~/kano/apps"
 //     "rsync_flags":"-Wavzh --stats --delete"
+//     "exclude":[
+//        "myDirectory/",
+//        "*.myFileType"
+//     ]
 // }
