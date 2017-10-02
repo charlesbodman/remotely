@@ -68,19 +68,6 @@ function readJSONFile(filePath) {
 
 
 /**
- * String matches regex array
- * @param {array} regexArray - array of regex's to match ignore
- * @param {string} needle - needle in the haystack
- */
-function stringMatchesRegexArray(regexArray, needle) {
-    return regexArray.reduce((prevMatch, regex) => {
-        return prevMatch ? prevMatch : regex.test(needle);
-    }, false);
-}
-
-
-
-/**
  * Listens for file changes and calls callback
  * @param {string} dir - directory to listen for changes
  * @param {function} callback - on change callback
