@@ -93,7 +93,8 @@ function listenToFileChanges(dir, action) {
 
     const watcher = chokidar.watch(dir, { persistent: true });
 
-    function onChange() {
+    function onChange(path) {
+        Log(`Change detected ${path}`);
         if (state === STATES.READY) {
             state = STATES.SYNCING;
             action().then(() => {
@@ -126,7 +127,7 @@ function createRsyncCommand({ source, dest, rsyncFlags, dryRun, excludeFiles }) 
         return new Promise((resolve, reject) => {
             const excludeString = buildExcludeList(excludeFiles);
             const command = `rsync ${excludeString} ${rsyncFlags} ${dryRun ? "--dry-run" : ""} ${source}/ ${dest}`;
-            Log(`Execting command ${command}`);
+            Log(`Executing command ${command}`);
             shell.exec(command, (code, stdout, stderr) => {
                 if (code === 0) {
                     resolve();
