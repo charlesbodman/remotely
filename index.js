@@ -128,6 +128,7 @@ const command = argv._[0];
 
 if (command === 'init') {
     writeConfig(readSampleConfig());
+    Log("Config created, please edit (.remotely.json) with remote and host")
     process.exit(0);
 }
 
