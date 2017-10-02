@@ -31,21 +31,25 @@ Remotely will climb up and use the first config file it finds
 
 Make sure you edit your config (`.remotely.json`) file after doing this. 
 
+---
 
 **Watch local directory for changes and rsync push on change**
 ```
 $ remotely watch
 ```
+---
 
 **Rsync pull down remote**
 ```
 $ remotely pull
 ```
+---
 
 **Rsync push to remote**
 ```
 $ remotely push
 ```
+---
 
 ## Config
 Remotely will look for the config file `.remotely.json` in any directory above where you call `remotely [command]`.
