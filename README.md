@@ -44,11 +44,11 @@ remotely push
 Remotely will look for the config file `.remotely.json` in any directory above where you call `remotely [command]`.
 This means that the config can belong anywhere, as long as remotely can find it by traversing upwards
 
-| Config        | Desc         |
-| ------------- |:-------------:|
-| local         | local path to sync dir |
-| remote      | remote host and path      |
-| rsync_flags | flags to customize rsync      |
+| Config        | Desc         |                |
+| ------------- |:-------------:|:-------------:|
+| local         | local path to sync dir | required |
+| remote      | remote host and path | required |
+| rsync_flags | flags to customize rsync  | optional |
 
 **Example config**
 
