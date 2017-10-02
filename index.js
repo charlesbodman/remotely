@@ -19,6 +19,7 @@ const LOG_TAG = 'Remotely:'
  */
 const DEFAULT_OPTIONS = {
     rsync_flags: "-Wavzh --stats --delete",
+    exclude: [],
     dry_run: true
 };
 
@@ -120,10 +121,11 @@ function listenToFileChanges(dir, action) {
  * Run remote to local rsync
  * @param {object} options - rsync options
  */
-function createRsyncCommand({ source, dest, rsyncFlags, dryRun }) {
+function createRsyncCommand({ source, dest, rsyncFlags, dryRun, excludeFiles }) {
     return () => {
         return new Promise((resolve, reject) => {
-            const command = `rsync ${rsyncFlags} ${dryRun ? "--dry-run" : ""} ${source}/ ${dest}`;
+            const excludeString = buildExcludeList(excludeFiles);
+            const command = `rsync ${excludeString} ${rsyncFlags} ${dryRun ? "--dry-run" : ""} ${source}/ ${dest}`;
             Log(`Execting command ${command}`);
             shell.exec(command, (code, stdout, stderr) => {
                 if (code === 0) {
@@ -136,6 +138,23 @@ function createRsyncCommand({ source, dest, rsyncFlags, dryRun }) {
         })
 
     };
+}
+
+
+
+/**
+ * Build list of exclude files & directories
+ * @param  {array} excludeFiles - Array of paths to be excluded
+ * @return {string} - Formatted lsit of excludes for rsync command
+ */
+function buildExcludeList(excludeFiles) {
+    var excludeString = '';
+
+    for(var excludeItem of excludeFiles) {
+        excludeString += ` --exclude '${excludeItem}'`
+    }
+
+    return excludeString;
 }
 
 
@@ -197,14 +216,16 @@ const push = createRsyncCommand({
     source: remotelyConfig.local,
     dest: remotelyConfig.remote,
     rsyncFlags: remotelyConfig.rsync_flags,
-    dryRun: remotelyConfig.dry_run
+    dryRun: remotelyConfig.dry_run,
+    excludeFiles: remotelyConfig.exclude
 })
 
 const pull = createRsyncCommand({
     source: remotelyConfig.remote,
     dest: remotelyConfig.local,
     rsyncFlags: remotelyConfig.rsync_flags,
-    dryRun: remotelyConfig.dry_run
+    dryRun: remotelyConfig.dry_run,
+    excludeFiles: remotelyConfig.exclude
 });
 
 
