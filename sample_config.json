@@ -1,6 +1,7 @@
 {
     "local":"", //Absolute path to local directory to sync
-    "remote":"" //Remote source
+    "remote":"", //Remote source,
+    "dry_run":true //Perform dry run
 }
 
 // Example

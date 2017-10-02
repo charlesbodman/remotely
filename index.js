@@ -19,7 +19,8 @@ const LOG_TAG = 'Remotely:'
  * Default Options
  */
 const DEFAULT_OPTIONS = {
-    rsync_flags: "-Wavzh --stats --delete"
+    rsync_flags: "-Wavzh --stats --delete",
+    dry_run:true
 };
 
 
@@ -90,9 +91,10 @@ function listenToFileChanges(dir, callback) {
  * Run remote to local rsync
  * @param {object} options - rsync options
  */
-function createRsyncCommand({ source, dest, rsync_flags }) {
+function createRsyncCommand({ source, dest, rsyncFlags, dryRun }) {
     return () => {
-        const command = `rsync ${rsync_flags} ${source}/ ${dest}`;
+        console.log(dryRun);
+        const command = `rsync ${rsyncFlags} ${dryRun ? "--dry-run" : "" } ${source}/ ${dest}`;
         Log(`Execting command ${command}`);
         shell.exec(command);
     };
@@ -156,13 +158,15 @@ const remotelyConfig = Object.assign({}, DEFAULT_OPTIONS, fileConfig);
 const push = createRsyncCommand({
     source: remotelyConfig.local,
     dest: remotelyConfig.remote,
-    rsync_flags: remotelyConfig.rsync_flags
+    rsyncFlags: remotelyConfig.rsync_flags,
+    dryRun:remotelyConfig.dry_run
 })
 
 const pull = createRsyncCommand({
     source: remotelyConfig.remote,
     dest: remotelyConfig.local,
-    rsync_flags: remotelyConfig.rsync_flags
+    rsyncFlags: remotelyConfig.rsync_flags,
+    dryRun:remotelyConfig.dry_run
 });
 
 
