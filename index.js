@@ -93,7 +93,6 @@ function listenToFileChanges(dir, callback) {
  */
 function createRsyncCommand({ source, dest, rsyncFlags, dryRun }) {
     return () => {
-        console.log(dryRun);
         const command = `rsync ${rsyncFlags} ${dryRun ? "--dry-run" : "" } ${source}/ ${dest}`;
         Log(`Execting command ${command}`);
         shell.exec(command);
