@@ -8,19 +8,18 @@ const chokidar = require("chokidar");
 const findUp   = require("find-up");
 const json     = require("comment-json");
 
-
-
 /**
  * Log Tag
  */
 const LOG_TAG = 'Remotely:'
+
 
 /**
  * Default Options
  */
 const DEFAULT_OPTIONS = {
     rsync_flags: "-Wavzh --stats --delete",
-    dry_run:true
+    dry_run: true
 };
 
 
@@ -31,6 +30,16 @@ const DEFAULT_OPTIONS = {
  */
 function Log(message) {
     console.log(`${LOG_TAG} ${message}`);
+}
+
+
+/**
+ * Log Error
+ * @param {object} error 
+ */
+function LogError(error) {
+    console.error(error);
+    process.exit(1);
 }
 
 
@@ -76,14 +85,47 @@ function stringMatchesRegexArray(regexArray, needle) {
  * @param {string} dir - directory to listen for changes
  * @param {function} callback - on change callback
  */
-function listenToFileChanges(dir, callback) {
+function listenToFileChanges(dir, action) {
+
     Log(`Listening to ${dir}`);
+
+    /**
+     * States
+     */
+    const STATES = {
+        SYNCING: "SYNCING",
+        READY: "READY",
+        WAITING: "WAITING"
+    }
+
+    /**
+     * Current state
+     */
+    let state = STATES.READY;
+
     const watcher = chokidar.watch(dir, { persistent: true });
-    watcher.on("change", function (path) {
-        Log(`Change detected ${path}`);
-        callback();
-    });
+
+    function onChange() {
+        if (state === STATES.READY) {
+            state = STATES.SYNCING;
+            action().then(() => {
+                const prevState = state;
+                state = STATES.READY;
+                if (prevState === STATES.WAITING) {
+                    onChange();
+                }
+            });
+        }
+        else {
+            Log("Will sync again after this sync completes");
+            state = STATES.WAITING;
+        }
+    }
+
+    watcher.on("change", debounce(onChange,200));
 }
+
+
 
 
 
@@ -93,9 +135,19 @@ function listenToFileChanges(dir, callback) {
  */
 function createRsyncCommand({ source, dest, rsyncFlags, dryRun }) {
     return () => {
-        const command = `rsync ${rsyncFlags} ${dryRun ? "--dry-run" : "" } ${source}/ ${dest}`;
-        Log(`Execting command ${command}`);
-        shell.exec(command);
+        return new Promise((resolve, reject) => {
+            const command = `rsync ${rsyncFlags} ${dryRun ? "--dry-run" : ""} ${source}/ ${dest}`;
+            Log(`Execting command ${command}`);
+            shell.exec(command, (code, stdout, stderr) => {
+                if (code === 0) {
+                    resolve();
+                }
+                else {
+                    reject(new Error(stderr));
+                }
+            });
+        })
+
     };
 }
 
@@ -158,14 +210,14 @@ const push = createRsyncCommand({
     source: remotelyConfig.local,
     dest: remotelyConfig.remote,
     rsyncFlags: remotelyConfig.rsync_flags,
-    dryRun:remotelyConfig.dry_run
+    dryRun: remotelyConfig.dry_run
 })
 
 const pull = createRsyncCommand({
     source: remotelyConfig.remote,
     dest: remotelyConfig.local,
     rsyncFlags: remotelyConfig.rsync_flags,
-    dryRun:remotelyConfig.dry_run
+    dryRun: remotelyConfig.dry_run
 });
 
 
@@ -179,7 +231,7 @@ const pull = createRsyncCommand({
 switch (command) {
 
     case "watch":
-        listenToFileChanges(remotelyConfig.local, debounce(push, 100));
+        listenToFileChanges(remotelyConfig.local, push );
         break;
 
     case "pull":
