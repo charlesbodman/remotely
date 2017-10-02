@@ -59,7 +59,6 @@ You can create remotely config by calling `remotely init`
 {
     "local":"/Users/charliebodman/documents/kano/apps", 
     "remote":"charlie@example.com:~/kano/apps"
-    "rsync_flags":"-Wavzh --stats --delete"
 }
 ```
 
