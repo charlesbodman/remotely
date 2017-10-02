@@ -65,12 +65,12 @@ This means that the config can belong anywhere, as long as remotely can find it 
 
 **Example config**
 
-This could live in `/Users/charliebodman/documents/kano/apps/.remotely.json`
+This could live in `/Users/charliebodman/documents/example/.remotely.json`
 You can create remotely config by calling `remotely init`
 ```javascript
 {
-    "local":"/Users/charliebodman/documents/kano/apps",
-    "remote":"charlie@example.com:~/kano/apps"
+    "local":"/Users/charliebodman/documents/example/project",
+    "remote":"charlie@example.com:~/example/project"
 }
 ```
 

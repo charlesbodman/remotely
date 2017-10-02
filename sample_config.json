@@ -6,8 +6,8 @@
 
 // Example
 // {
-//     "local":"/Users/charliebodman/documents/kano/apps",
-//     "remote":"charlie@example.com:~/kano/apps"
+//     "local":"/Users/charliebodman/path/to/project",
+//     "remote":"charlie@example.com:~/path/to/project"
 //     "rsync_flags":"-Wavzh --stats --delete"
 //     "exclude":[
 //        "myDirectory/",
