@@ -20,7 +20,7 @@ npm install -g https://github.com/charlesbodman/remotely
 
 ## Usage
 
-**Create remotely config (.remotely.json)**
+**Create remotely config (`.remotely.json`)**
 ```
 $ remotely init
 ```
