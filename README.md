@@ -21,14 +21,16 @@ npm install -g https://github.com/charlesbodman/remotely
 ## Usage
 
 **Create remotely config (`.remotely.json`)**
-
+```
+$ remotely init
+```
 Run this in any parent directory from where you are going to be running `remotely`.
 
 Remotely will climb up and use the first config file it finds
 [Read about config here](#config)
-```
-$ remotely init
-```
+
+Make sure you edit your config (`.remotely.json`) file after doing this. 
+
 
 **Watch local directory for changes and rsync push on change**
 ```
