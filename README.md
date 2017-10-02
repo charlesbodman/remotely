@@ -22,22 +22,22 @@ npm install -g https://github.com/charlesbodman/remotely
 
 **Create remotely config**
 ```
-remotely init
+$ remotely init
 ```
 
 **Watch local directory for changes and rsync push on change**
 ```
-remotely watch
+$ remotely watch
 ```
 
 **Rsync pull down remote**
 ```
-remotely pull
+$ remotely pull
 ```
 
 **Rsync push to remote**
 ```
-remotely push
+$ remotely push
 ```
 
 ## Config
