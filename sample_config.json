@@ -8,7 +8,7 @@
 // {
 //     "local":"/Users/charliebodman/path/to/project",
 //     "remote":"charlie@example.com:~/path/to/project"
-//     "rsync_flags":"-Wavzh --stats --delete"
+//     "rsync_flags":"-WavhP --stats --delete"
 //     "exclude":[
 //        "myDirectory/",
 //        "*.myFileType"

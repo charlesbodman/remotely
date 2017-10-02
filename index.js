@@ -18,7 +18,7 @@ const LOG_TAG = 'Remotely:'
  * Default Options
  */
 const DEFAULT_OPTIONS = {
-    rsync_flags: "-Wavzh --stats --delete",
+    rsync_flags: "-WavhP --stats --delete",
     exclude: [],
     dry_run: true
 };
