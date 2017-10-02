@@ -35,7 +35,7 @@ function Log(message) {
 
 /**
  * Log Error
- * @param {object} error 
+ * @param {object} error
  */
 function LogError(error) {
     console.error(error);
@@ -57,7 +57,7 @@ function findConfigFilePath() {
 /**
  * Read JSON File
  * @param {string} filePath
- * @return {object} config object 
+ * @return {object} config object
  */
 function readJSONFile(filePath) {
     const configContent = fs.readFileSync(filePath);
@@ -151,7 +151,7 @@ function readSampleConfig() {
 
 /**
  * Write config
- * @param {object} data 
+ * @param {object} data
  */
 function writeConfig(data) {
     fs.writeFileSync(`${cwd}/.remotely.json`, data, { flag: 'w+' });
