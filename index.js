@@ -138,8 +138,8 @@ function createRsyncCommand({ source, dest, rsyncFlags, dryRun, excludeFiles, on
             Log(`Executing command ${command}`);
             shell.exec(command, (code, stdout, stderr) => {
                 if (code === 0) {
-                    resolve();
                     onComplete();
+                    resolve();
                 }
                 else {
                     reject(new Error(stderr));

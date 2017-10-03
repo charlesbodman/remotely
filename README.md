@@ -15,7 +15,7 @@
 
 ## Install
 ```
-npm install -g https://github.com/charlesbodman/remotely
+npm install -g remotely-cli
 ```
 
 ## Usage

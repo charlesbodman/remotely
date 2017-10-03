@@ -1,5 +1,5 @@
 {
-  "name": "remotely",
+  "name": "remotely-cli",
   "version": "1.0.3",
   "description": "Watch and automatcally sync directories remotely",
   "main": "index.js",
