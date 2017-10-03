@@ -7,11 +7,13 @@ const argv     = require("minimist")(process.argv.slice(2));
 const chokidar = require("chokidar");
 const findUp   = require("find-up");
 const json     = require("comment-json");
+const notifier = require("node-notifier");
+const chalk    = require("chalk");
 
 /**
  * Log Tag
  */
-const LOG_TAG = 'Remotely:'
+const LOG_TAG = 'Remotely: '
 
 
 /**
@@ -20,7 +22,8 @@ const LOG_TAG = 'Remotely:'
 const DEFAULT_OPTIONS = {
     rsync_flags: "-WavhzP --stats --delete",
     exclude: [],
-    dry_run: true
+    dry_run: true,
+    notify:true
 };
 
 
@@ -30,7 +33,7 @@ const DEFAULT_OPTIONS = {
  * @param {string} message - message to log
  */
 function Log(message) {
-    console.log(`${LOG_TAG} ${message}`);
+    console.log(chalk.cyan(`${LOG_TAG}`) + `${message}`);
 }
 
 
@@ -75,7 +78,7 @@ function readJSONFile(filePath) {
  */
 function listenToFileChanges(dir, action) {
 
-    Log(`Listening to ${dir}`);
+    Log(`Watching ${dir}`);
 
     /**
      * States
@@ -94,12 +97,16 @@ function listenToFileChanges(dir, action) {
     const watcher = chokidar.watch(dir, { persistent: true });
 
     function onChange(path) {
-        Log(`Change detected ${path}`);
+        if(path){
+            Log(`Change detected ${path}`);
+        }
+
         if (state === STATES.READY) {
             state = STATES.SYNCING;
             action().then(() => {
                 const prevState = state;
                 state = STATES.READY;
+                Log("Watching...");
                 if (prevState === STATES.WAITING) {
                     onChange();
                 }
@@ -112,6 +119,7 @@ function listenToFileChanges(dir, action) {
     }
 
     watcher.on("change", debounce(onChange,200));
+
 }
 
 
@@ -122,7 +130,7 @@ function listenToFileChanges(dir, action) {
  * Run remote to local rsync
  * @param {object} options - rsync options
  */
-function createRsyncCommand({ source, dest, rsyncFlags, dryRun, excludeFiles }) {
+function createRsyncCommand({ source, dest, rsyncFlags, dryRun, excludeFiles, onComplete = ()=>{} }) {
     return () => {
         return new Promise((resolve, reject) => {
             const excludeString = buildExcludeList(excludeFiles);
@@ -131,6 +139,7 @@ function createRsyncCommand({ source, dest, rsyncFlags, dryRun, excludeFiles }) 
             shell.exec(command, (code, stdout, stderr) => {
                 if (code === 0) {
                     resolve();
+                    onComplete();
                 }
                 else {
                     reject(new Error(stderr));
@@ -178,6 +187,22 @@ function writeConfig(data) {
 }
 
 
+/**
+ * Creates a notifier function
+ * @param {string} param.title - notification title
+ * @param {string} param.message - notification message
+ */
+function createNotifer({title, message}){
+    return () => {
+        notifier.notify({
+            title:title,
+            message:message,
+            wait:false
+        });
+    }
+}
+
+
 
 /**
  * Check if config exists
@@ -208,6 +233,11 @@ const fileConfig = readJSONFile(configFilePath);
 const remotelyConfig = Object.assign({}, DEFAULT_OPTIONS, fileConfig);
 
 
+/**
+ * Create notifiers
+ */
+const notifyPush = createNotifer({title:"Remotely",message:"Push complete"});
+const notifyPull = createNotifer({title:"Remotely",message:"Pull complete"});
 
 
 /**
@@ -218,15 +248,28 @@ const push = createRsyncCommand({
     dest: remotelyConfig.remote,
     rsyncFlags: remotelyConfig.rsync_flags,
     dryRun: remotelyConfig.dry_run,
-    excludeFiles: remotelyConfig.exclude
+    excludeFiles: remotelyConfig.exclude,
+    onComplete:()=>{
+        if(remotelyConfig.notify){
+            notifyPush();
+        }
+    }
 })
 
+/**
+ * Create pull
+ */
 const pull = createRsyncCommand({
     source: remotelyConfig.remote,
     dest: remotelyConfig.local,
     rsyncFlags: remotelyConfig.rsync_flags,
     dryRun: remotelyConfig.dry_run,
-    excludeFiles: remotelyConfig.exclude
+    excludeFiles: remotelyConfig.exclude,
+    onComplete:()=>{
+        if(remotelyConfig.notify){
+            notifyPull();
+        }
+    }
 });
 
 

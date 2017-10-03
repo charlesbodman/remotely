@@ -62,6 +62,7 @@ This means that the config can belong anywhere, as long as remotely can find it 
 | rsync_flags | flags to customize rsync  | optional |
 | dry_run | perform dry run | optional |
 | exclude | files or directories to exclude | optional |
+| notify | notify when complete | optional |
 
 **Example config**
 
