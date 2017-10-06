@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 const cwd      = process.cwd();
 const fs       = require("fs");
+const path     = require("path");
 const debounce = require("debounce");
 const shell    = require("shelljs");
 const argv     = require("minimist")(process.argv.slice(2));
@@ -197,7 +198,8 @@ function createNotifer({title, message}){
         notifier.notify({
             title:title,
             message:message,
-            wait:false
+            wait:false,
+            icon:path.join(__dirname, 'notification_icon.png')
         });
     }
 }

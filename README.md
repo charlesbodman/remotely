@@ -1,6 +1,6 @@
-<img src="https://github.com/charlesbodman/remotely/blob/master/icon.png" width="233"/>
+# <img src="https://raw.githubusercontent.com/charlesbodman/remotely/master/icon.png" width="233"/>
 
-## Rsyncing simplified, push, pull, watch.  
+## Rsyncing simplified, push, pull, watch.
 
 ## Table of Contents
 
@@ -84,8 +84,6 @@ You can create remotely config by calling `remotely init`
 ## Contribute
 
 PRs accepted.
-
-Small note: If editing the README, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
 
 ## License
 
