@@ -1,6 +1,6 @@
 <img src="https://github.com/charlesbodman/remotely/blob/master/icon.png" width="233"/>
 
-##Rsyncing simplified, push, pull, watch.  
+## Rsyncing simplified, push, pull, watch.  
 
 ## Table of Contents
 
