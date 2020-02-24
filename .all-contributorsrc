@@ -14,6 +14,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "GriffinLedingham",
+      "name": "Griffin Ledingham",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2390265?v=4",
+      "profile": "https://griffinledingham.me/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
